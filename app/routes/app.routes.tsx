@@ -1,16 +1,35 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Warnings from '../screens/Warnings';
+import Reservations from '../screens/Reservations';
+import CustomDrawerContent from '../components/CustomDrawerContent';
+import React from 'react';
+import { View } from 'react-native';
+import CustomHeader from '../components/CustomHeader';
 
-import Login  from "../screens/Login";
-import RecoverPassword  from "../screens/RecoverPassword";
-import React from "react";
+const Drawer = createDrawerNavigator();
 
-const { Navigator, Screen } = createNativeStackNavigator();
-
-export function AppRoutes() {
+export default function AppRoutes() {
   return (
-    <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="Login" component={Login}/>
-      <Screen name="RecoverPassword" component={RecoverPassword}/>
-    </Navigator>
-  )
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        header: (props) => (
+          <View>
+            <CustomHeader />
+          </View>
+        ),
+      }}
+    >
+    <Drawer.Screen
+        name="Warnings"
+        component={Warnings}
+        options={{ headerTitle: (props) => <CustomHeader /> }}
+    />
+    <Drawer.Screen
+      name="Reservations"
+      component={Reservations}
+      options={{ headerTitle: (props) => <CustomHeader  /> }}
+    />
+  </Drawer.Navigator>
+  );
 }

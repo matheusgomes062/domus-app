@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { Routes } from './routes';
-import { TextInput, Text } from 'react-native';
+import 'react-native-gesture-handler';
+import store from './store/index';
+import { Provider } from 'react-redux';
 
 function App() {
   return (
-    <Routes/>
+    <Provider store={store}>
+        <Routes/>
+    </Provider>
     
   );
 }

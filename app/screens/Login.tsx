@@ -3,21 +3,20 @@ import { View, TouchableWithoutFeedback, Keyboard, Text, StyleSheet } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import GenericButton from '../components/Button';
 import Input from '../components/Input';
 import { loginSchema } from '../validation/ValidationSchema';
+import AuthService from '../services/AuthService';
+import { useDispatch } from 'react-redux';
+import { setUserLogin } from '../store/actions/authActions';
 
 export default function Login() {
   const navigation = useNavigation();
+
   const { control, handleSubmit, formState: { errors }, trigger } = useForm({
     resolver: yupResolver(loginSchema),
     mode: 'onChange',
   });
-
-  const handleFocusPassword = async () => {
-    await trigger("password");
-  };
 
   const [formValues, setFormValues] = useState({
     email: '',
@@ -28,8 +27,17 @@ export default function Login() {
     Keyboard.dismiss();
   };
 
-  const handleLogin = (data) => {
-    console.log('Login', data);
+  const dispatch = useDispatch();
+
+  const handleLogin = async (data) => {
+    try {
+      const token = await AuthService.login(data.email, data.password);
+
+      token && dispatch(setUserLogin(token));
+
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   const onFormChange = (data) => {
@@ -59,8 +67,8 @@ export default function Login() {
                     onChange(text);
                     onFormChange({ ...formValues, email: text });
                   }}
+                  error={errors.email && errors.email.message} 
                 />
-                {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
               </>
             )}
             name="email"
@@ -80,18 +88,17 @@ export default function Login() {
                     onChange(text);
                     onFormChange({ ...formValues, password: text });
                   }}
-                  onFocus={handleFocusPassword}
+                  error={errors.password && errors.password.message} 
                 />
-                {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
               </>
             )}
             name="password"
             defaultValue=""
           />
 
-          {isFormValid && (
-            <GenericButton text="Login" onPress={handleSubmit(handleLogin)} showArrow={true} style={styles.button} />
-          )}
+          <GenericButton text="Login" onPress={handleSubmit((data) => handleLogin(data))} showArrow={true} style={styles.button} />
+
+          <View style={styles.rectangleDetail}/>
 
           <Text style={styles.forgotPasswordLink} onPress={() => navigation.navigate('RecoverPassword')}>
             Esqueceu sua senha?
@@ -115,10 +122,6 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#D9D9D9',
     marginTop: 16,
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 4,
   },
   forgotPasswordLink: {
     alignSelf: 'center',
@@ -144,6 +147,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   button: {
-    marginTop: 16,
+    marginTop: 21,
   },
+  rectangleDetail: {
+    marginTop: 21,
+    height: 2,
+    backgroundColor: '#D9D9D9',
+  }
 });
