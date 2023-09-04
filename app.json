@@ -1,13 +1,27 @@
 {
   "expo": {
     "scheme": "acme",
+    "version": "0.0.1",
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       "expo-router"
     ],
     "name": "domus-app",
-    "slug": "domus-app"
+    "slug": "domus-app",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#D9D9D9",
+      "resizeMode": "cover"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    }
   }
 }
