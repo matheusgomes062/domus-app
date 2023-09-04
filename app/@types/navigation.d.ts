@@ -1,4 +1,4 @@
-export declare global {
+declare global {
   namespace ReactNavigation {
     interface RootParamList {
       RecoverPassword: undefined;
@@ -6,3 +6,5 @@ export declare global {
     }
   }
 }
+
+export default global;
