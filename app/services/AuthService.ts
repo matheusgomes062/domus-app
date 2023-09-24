@@ -3,7 +3,7 @@ import axios from 'axios';
 const AuthService = {
   login: async (email: string, password: string): Promise<string> => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, {
+      const response = await axios.post(`https://238e-2804-2c44-277-200-6db2-8443-9d8f-a2f9.ngrok-free.app/login`, {
         email,
         password,
       });
